@@ -1,0 +1,92 @@
+<body>
+    <button onclick="getPerHour()">Get All Per Hour</button>
+    <div id="perHour"></div>
+
+    <br>
+    <hr>
+    <br>
+
+    <button onclick="getPerTen()">Get All Per Ten Min</button>
+    <div id="perTen"></div>
+
+    <br>
+    <hr>
+    <br>
+
+    <button onclick="getAllTimestamps()">Get All Timestamps</button>
+    <div id="timestamps"></div>
+    
+    <script>
+        function getAllTimestamps(){
+            var request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:3005/timestamp/all", false);
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader('Access-Control-Allow-Headers', 'access-control-allow-origin, content-type, origin, x-requested-with');
+            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+            request.send();
+            var response = JSON.parse(request.responseText);
+
+            var divAppend = document.getElementById('timestamps');
+            divAppend.innerHTML = "";
+
+            for(var i=0; i< response.timestamps.length; i++) {
+                divAppend.innerHTML += '<p>' + response.timestamps[i].timestamp + ' - ' + response.timestamps[i].sensor + '</p>';
+            }
+        }
+    </script>
+    
+    <script>
+        function getPerHour(){
+            var request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:3005/timestamp/allPerHour", false);
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader('Access-Control-Allow-Headers', 'access-control-allow-origin, content-type, origin, x-requested-with');
+            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+            request.send();
+            var response = JSON.parse(request.responseText);
+
+            var divAppend = document.getElementById('perHour');
+            divAppend.innerHTML = "";
+            var string;
+            for(var i=0; i< response.perHour.length; i++) {
+                if(i % 2 == 0) {
+                    // Hour
+                    string = response.perHour[i] + " - ";
+                } else {
+                    // Number
+                    string += response.perHour[i];
+                    divAppend.innerHTML += '<p>' + string + '</p>';
+                    string = "";
+                }
+            }
+        }
+    </script>
+
+    <script>
+        function getPerTen(){
+            var request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:3005/timestamp/allPerTen", false);
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader('Access-Control-Allow-Headers', 'access-control-allow-origin, content-type, origin, x-requested-with');
+            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+            request.send();
+            var response = JSON.parse(request.responseText);
+
+            var divAppend = document.getElementById('perTen');
+            divAppend.innerHTML = "";
+            var string;
+            for(var i=0; i< response.perTen.length; i++) {
+                if(i % 2 == 0) {
+                    // Ten Min
+                    string = response.perTen[i] + " - ";
+                } else {
+                    // Number
+                    string += response.perTen[i];
+                    divAppend.innerHTML += '<p>' + string + '</p>';
+                    string = "";
+                }
+            }
+        }
+    </script>
+</body>
+
